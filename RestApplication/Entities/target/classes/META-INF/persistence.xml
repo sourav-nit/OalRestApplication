@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="windows-1252" ?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+             version="2.0">
+  <persistence-unit name="Entities" transaction-type="JTA">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <jta-data-source>jdbc/HR</jta-data-source>
+        <class>oal.oracle.apps.epm.entities.Employees</class>
+        <class>oal.oracle.apps.epm.entities.Departments</class>
+        <class>oal.oracle.apps.epm.entities.Order_Lines</class>
+        <class>oal.oracle.apps.epm.entities.Order_Header</class>
+        <class>oal.oracle.apps.epm.entities.Customer</class>
+    <properties>
+      <property name="eclipselink.target-server" value="WebLogic_10"/>
+      <property name="javax.persistence.jtaDataSource" value="jdbc/HR"/>
+    </properties>
+  </persistence-unit>
+</persistence>

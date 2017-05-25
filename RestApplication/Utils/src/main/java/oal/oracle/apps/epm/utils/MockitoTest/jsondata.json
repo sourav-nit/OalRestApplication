@@ -1,0 +1,18 @@
+ {
+      "orderliness": [
+        {
+          "productId": 85,
+          "productName": "Kurkure",
+          "startDate": "02/09/2017",
+          "endDate": "02/10/2017",
+          "sellingPrice": 20,
+          "quantity": 75,
+          "lineNumber": 903
+        }
+      ],
+      "orderNumber": 207,
+      "customerId": 12,
+      "status": "OPEN",
+      "bookedDate": "01/07/2017",
+      "orderValue": 1300
+    }
