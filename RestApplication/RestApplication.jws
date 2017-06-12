@@ -37,4 +37,22 @@
          <url n="pomfileURL" path="pom.xml"/>
       </hash>
    </hash>
+   <hash n="oracle.jdeveloper.model.PathsConfiguration">
+      <hash n="ApplicationSrcContentSet">
+         <list n="pattern-filters">
+            <string v="+**"/>
+         </list>
+         <list n="url-path">
+            <url path="src/"/>
+         </list>
+      </hash>
+   </hash>
+   <hash n="oracle.mds.internal.dt.ide.CustOptions">
+      <list n="customizationLibraries">
+         <hash/>
+      </list>
+   </hash>
+   <hash n="Weblogic JDBC">
+      <value n="Weblogic-JDBC-Auto-Sync-Key" v="false"/>
+   </hash>
 </jws:workspace>

@@ -17,7 +17,8 @@ public class PropertyMessage {
             Properties prop = new Properties();
             InputStream input = null;
             try{
-            input = new FileInputStream("C:/JDeveloper/mywork/RestApplication/Utils/src/main/java/oal/oracle/apps/epm/utils/properties/ExceptionProp_"+lang+".properties");
+            //input = new FileInputStream("C:/JDeveloper/mywork/RestApplication/Utils/src/main/java/oal/oracle/apps/epm/utils/properties/ExceptionProp_"+lang+".properties");
+            input=PropertyMessage.class.getResourceAsStream("ExceptionProp_"+lang+".properties");
             prop.load(input);
             Set<Object> keys = prop.keySet();
             propMap=new HashMap<String,String>();  

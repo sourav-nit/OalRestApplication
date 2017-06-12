@@ -17,6 +17,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -30,6 +31,8 @@ import javax.xml.bind.annotation.XmlTransient;
 
 @XmlRootElement(name="Departments")
 @Entity
+@EntityListeners({EntityListener_CreatedBy.class,EntityListener_UpdateDate.class,EntityListener_CreationDate.class,EntityListener_LastUpdatedBy.class})
+
 public class Departments extends BaseEntity implements Serializable {
     private static final long serialVersionUID = -1246294097529286468L;
 
@@ -109,14 +112,16 @@ public class Departments extends BaseEntity implements Serializable {
         this.empList = empList;
     }
     
-    public void setCreationDate(){
-        java.sql.Date sqlDate = new java.sql.Date(new java.util.Date().getTime());
-        this.creationDate=sqlDate;
+    public void setCreationDate(Date date){
+        //java.sql.Date sqlDate = new java.sql.Date(new java.util.Date().getTime());
+        //this.creationDate=sqlDate;
+        this.creationDate=date;
     }
     
-    public void setLastUpdatedDate(){
-        java.sql.Date sqlDate = new java.sql.Date(new java.util.Date().getTime());
-        this.lastUpdatedDate=sqlDate;
+    public void setLastUpdatedDate(Date date){
+        //java.sql.Date sqlDate = new java.sql.Date(new java.util.Date().getTime());
+        //this.lastUpdatedDate=sqlDate;
+        this.lastUpdatedDate=date;
     }
     
     public void setCreatedBy(String name){

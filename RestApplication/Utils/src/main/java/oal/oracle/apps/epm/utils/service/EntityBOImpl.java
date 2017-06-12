@@ -1,15 +1,10 @@
 package oal.oracle.apps.epm.utils.service;
 
-
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,16 +14,18 @@ import javax.naming.NamingException;
 import javax.persistence.Id;
 
 import javax.ws.rs.Consumes;
-import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.MediaType;
 
+
+import javax.ws.rs.core.Context;
+
+import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.core.UriInfo;
 
 import oal.oracle.apps.epm.entities.BaseEntity;
 import oal.oracle.apps.epm.entities.CustomResponse;
@@ -37,6 +34,7 @@ import oal.oracle.apps.epm.entities.Meta;
 import oal.oracle.apps.epm.utils.Dao.EntityDao;
 import oal.oracle.apps.epm.utils.Dao.EntityDaoImpl;
 import oal.oracle.apps.epm.utils.Exception.MyLocalizedThrowable;
+
 
 
 //This is the main business class which will be run by rest api
@@ -87,6 +85,7 @@ public class EntityBOImpl {
         return cust;
     }
     
+    /*
     @GET
     @Path("/")
     @Produces("application/json")
@@ -142,7 +141,8 @@ public class EntityBOImpl {
             dao.closeEntityManager();
         }
           return cust;
-    }
+    }*/
+    
     /*
     @GET
     @Path("/{id}/{Child}")
@@ -301,6 +301,85 @@ public class EntityBOImpl {
         }
         return cust;
     }
+ /*   
+    public static HashMap<String,String> getQueryData(String INPUT){
+        String REGEX = "\\w+[=]";    
+        Pattern p = Pattern.compile(REGEX);
+        Matcher m = p.matcher(INPUT);
+        int count = 0,end=0;
+        String temp=null;
+        HashMap<String,String> hm=new HashMap<String,String>();
+        while(m.find()) {
+            if(count>=1){
+                hm.put(temp,INPUT.substring(end,m.start()-1));
+            }
+            count++;
+            end=m.end();
+            temp=INPUT.substring(m.start(),m.end()-1);
+            hm.put(temp,null);
+        }
+        hm.put(temp,INPUT.substring(end));
+        return hm;     
+    }*/  
     
+    //Get data with the help of query parameter
+    
+    @GET
+    @Path("/")
+    @Produces("application/json")
+    public CustomResponse getData(@PathParam("Entity") String ent,
+                                  @Context UriInfo ui,
+                                  @HeaderParam("Accept-Language") String lang) {
+        CustomResponse cust;
+        Meta meta=null;
+        int offset=0,limit=10;
+
+        try{
+            setEntityDao(ent);
+            MultivaluedMap<String, String> QueryData= ui.getQueryParameters();    
+            if(QueryData.containsKey("offset")){
+                offset=Integer.parseInt(QueryData.getFirst("offset"));
+            }
+            if(QueryData.containsKey("limit")){
+                limit=Integer.parseInt(QueryData.getFirst("limit"));
+            }
+            if(offset<0 || limit<0){
+                MyLocalizedThrowable ex= new MyLocalizedThrowable("OFFSET_ERROR");
+                ex.setLang(lang);
+                throw ex;
+            }
+            for(String keys:QueryData.keySet()){
+                int err=0;
+                for(Field field:entity.getDeclaredFields()){
+                    if(field.getName().equals(keys) || keys.equals("offset") || keys.equals("limit")){
+                        err=1;
+                        break;
+                    }                    
+                }
+                if(err==0){
+                    MyLocalizedThrowable ex= new MyLocalizedThrowable("INVALID_FIELD");
+                    ex.setLang(lang);
+                    throw ex;
+                }
+            }            
+            meta=new Meta(offset,limit);
+            List<BaseEntity> beList=dao.getData(offset,limit,QueryData);
+            if(beList.isEmpty()){
+                MyLocalizedThrowable ex= new MyLocalizedThrowable("INVALID_FIELD");
+                ex.setLang(lang);
+                throw ex;
+            }
+            cust=new CustomResponse("Success",null,meta,beList);
+        }catch(MyLocalizedThrowable e){
+            ErrorMessage err=new ErrorMessage(e.getLocalizedMessage(),e.getMessage());
+            cust=new CustomResponse("Error",err,null,null); 
+        }catch(Exception e){
+            ErrorMessage err=new ErrorMessage(e.toString(),e.getMessage());
+            cust=new CustomResponse("Error",err,null,null);  
+        }finally{
+            dao.closeEntityManager();
+        }
+          return cust;
+    }
 }
 

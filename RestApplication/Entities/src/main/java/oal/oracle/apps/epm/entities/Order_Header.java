@@ -9,11 +9,14 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.SequenceGenerator;
 
 import javax.xml.bind.annotation.XmlElement;
@@ -22,6 +25,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 @XmlRootElement(name = "OrderHeader")
 @Entity
+@EntityListeners({EntityListener_CreatedBy.class,EntityListener_UpdateDate.class,EntityListener_CreationDate.class,EntityListener_LastUpdatedBy.class})
 public class Order_Header extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     @GeneratedValue(generator="pk_sq")
@@ -115,7 +119,7 @@ public class Order_Header extends BaseEntity implements Serializable {
     public Integer getOrderValue() {
         return orderValue;
     }
-
+    
     public void setCreatedBy(String CreatedBy) {
         this.createdBy = CreatedBy;
     }
@@ -124,6 +128,7 @@ public class Order_Header extends BaseEntity implements Serializable {
     public String getCreatedBy() {
         return createdBy;
     }
+
 
     public void setLastUpdatedBy(String LastUpdatedBy) {
         this.lastUpdatedBy = LastUpdatedBy;
@@ -153,24 +158,27 @@ public class Order_Header extends BaseEntity implements Serializable {
             return df.format(lastUpdatedDate);
         }
     }
-    
-    public void setCreationDate(){
-        java.sql.Date sqlDate = new java.sql.Date(new java.util.Date().getTime());
-        this.creationDate=sqlDate;
+
+    public void setCreationDate(Date date){
+        //java.sql.Date sqlDate = new java.sql.Date(new java.util.Date().getTime());
+        //this.creationDate=sqlDate;
+        this.creationDate=date;
     }
     
-    public void setLastUpdatedDate(){
-        java.sql.Date sqlDate = new java.sql.Date(new java.util.Date().getTime());
-        this.lastUpdatedDate=sqlDate;
+    
+    public void setLastUpdatedDate(Date date){
+        //java.sql.Date sqlDate = new java.sql.Date(new java.util.Date().getTime());
+        //this.lastUpdatedDate=sqlDate;
+        this.lastUpdatedDate=date;
     }
     
     public void setOrderliness(List<Order_Lines> orderliness) {
             for(Order_Lines ol:orderliness){
                 ol.setOrderheader(this);
-                ol.setCreatedBy("Oracle");
+                /*ol.setCreatedBy("Oracle");
                 ol.setCreationDate();
                 ol.setLastUpdatedDate();
-                ol.setLastUpdatedBy("Oracle");
+                ol.setLastUpdatedBy("Oracle");*/
             }
         this.orderliness = orderliness;
     }

@@ -21,9 +21,12 @@ import javax.transaction.SystemException;
 
 import javax.transaction.UserTransaction;
 
+import javax.ws.rs.core.MultivaluedHashMap;
+import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.core.UriInfo;
+
 import oal.oracle.apps.epm.entities.BaseEntity;
 import oal.oracle.apps.epm.entities.Employees;
-import oal.oracle.apps.epm.entities.Order_Header;
 import oal.oracle.apps.epm.utils.Dao.EntityDao;
 import oal.oracle.apps.epm.utils.Dao.EntityDaoImpl;
 
@@ -43,6 +46,7 @@ public class EntityDaoImplTest {
     private Employees emp2;
     private EntityDao employeedao;
     private List<BaseEntity> beList=new ArrayList<BaseEntity>();
+    private MultivaluedMap<String,String> map;
     
     @Before
     public void setup() throws NamingException, ParseException {
@@ -53,19 +57,23 @@ public class EntityDaoImplTest {
         UserTransaction transaction=mock(UserTransaction.class);
         
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        Date date2=dateFormat.parse("03/06/1993");   
+        Date date2=dateFormat.parse("03/06/1993");
+        
+        map=new MultivaluedHashMap<String,String>();
+        map.putSingle("offset","0");
+        map.putSingle("limit","2");
         
         //Employees 1st Object
         emp1=new Employees(0,"Test",1001,"Hello",date2,"AD_VP","End","590.423.4567",1000,100);
-        emp1.setCreationDate();
-        emp1.setLastUpdatedDate();
+        emp1.setCreationDate(date2);
+        emp1.setLastUpdatedDate(date2);
         emp1.setLastUpdatedBy("Oracle");
         emp1.setCreatedBy("Oracle");
         
         //Employees 2nd Object
         emp2=new Employees(0,"Test2",1003,"Hi",date2,"AD_VP","End","590.423.4567",1000,100);
-        emp2.setCreationDate();
-        emp2.setLastUpdatedDate();
+        emp2.setCreationDate(date2);
+        emp2.setLastUpdatedDate(date2);
         emp2.setLastUpdatedBy("Oracle");
         emp2.setCreatedBy("Oracle");
         
@@ -79,7 +87,7 @@ public class EntityDaoImplTest {
         //Mocking the Employee Dao Methods
         Mockito.when(em.find(Employees.class,1001)).thenReturn(emp1);
         Mockito.when(em.find(Employees.class,1003)).thenReturn(emp2);
-        Mockito.when(em.createQuery("select e from Employees e")).thenReturn(mockedQuery);
+        Mockito.when(em.createQuery("SELECT e FROM Employees e")).thenReturn(mockedQuery);
         Mockito.when(mockedQuery.setFirstResult(0)).thenReturn(mockedQuery);
         Mockito.when(mockedQuery.setMaxResults(2)).thenReturn(mockedQuery);
         Mockito.when(mockedQuery.getResultList()).thenReturn(beList);
@@ -110,7 +118,7 @@ public class EntityDaoImplTest {
     @Test
     public void testGetData() throws NotSupportedException, SystemException, RollbackException, HeuristicMixedException,
                                     HeuristicRollbackException {  
-        Assert.assertEquals(employeedao.getData(0,2,null),beList);
+        Assert.assertEquals(employeedao.getData(0,2,map),beList);
     }
 
 }

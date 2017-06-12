@@ -1,9 +1,10 @@
 package oal.oracle.apps.epm.utils.Multithreading;
 
+
 public class MyRunnable implements Runnable {
     
     NotThreadSafe instance = null;
-
+    
     public MyRunnable(NotThreadSafe instance){
       this.instance = instance;
     }

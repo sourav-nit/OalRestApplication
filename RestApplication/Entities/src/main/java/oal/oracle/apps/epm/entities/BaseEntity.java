@@ -1,15 +1,14 @@
 package oal.oracle.apps.epm.entities;
 
-import javax.xml.bind.annotation.XmlRootElement;
+import java.util.Date;
 
-@XmlRootElement
 public abstract class BaseEntity  {
     public BaseEntity() {
         super();
     }
     
-    public abstract void setCreationDate();
-    public abstract void setLastUpdatedDate();
+    public abstract void setCreationDate(Date date);
+    public abstract void setLastUpdatedDate(Date date);
     public abstract void setCreatedBy(String name);
     public abstract void setLastUpdatedBy(String name);
     public abstract String getCreationDate();

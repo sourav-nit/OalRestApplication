@@ -9,6 +9,8 @@ import javax.transaction.NotSupportedException;
 import javax.transaction.RollbackException;
 import javax.transaction.SystemException;
 
+import javax.ws.rs.core.MultivaluedMap;
+
 import oal.oracle.apps.epm.entities.BaseEntity;
 
 public interface EntityDao {
@@ -19,7 +21,7 @@ public interface EntityDao {
     public BaseEntity find(final Object id);
     public BaseEntity update(final BaseEntity t) throws NotSupportedException, SystemException, RollbackException,
                                                         HeuristicMixedException, HeuristicRollbackException;
-    public List<BaseEntity> getData(int offset,int limit,HashMap<String,String> queryData);
+    public List<BaseEntity> getData(int offset,int limit,MultivaluedMap<String,String> queryData);
     public void setEntity(Class temp);
     public void closeEntityManager();
 }

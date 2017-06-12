@@ -86,7 +86,8 @@
       <value n="webIANAEncoding" v="windows-1252"/>
    </hash>
    <hash n="oracle.jdeveloper.maven.compiler.MavenConfiguration">
-      <url n="pomfileURL" path="pom.xml"/>
+      <value n="testPomfileURL"/>
+      <value n="testProject" v="false"/>
    </hash>
    <hash n="oracle.jdeveloper.model.J2eeSettings">
       <value n="j2eeWebAppName" v="RestApplication-Entities-webapp"/>

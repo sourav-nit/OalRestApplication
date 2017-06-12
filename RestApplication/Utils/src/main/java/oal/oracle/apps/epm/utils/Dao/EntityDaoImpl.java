@@ -21,6 +21,8 @@ import javax.transaction.RollbackException;
 import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
 
+import javax.ws.rs.core.MultivaluedMap;
+
 import oal.oracle.apps.epm.entities.BaseEntity;
 
 
@@ -83,10 +85,10 @@ public class EntityDaoImpl implements EntityDao{
                                                         HeuristicMixedException, HeuristicRollbackException {
         transaction.begin();
         em.joinTransaction();
-        t.setCreatedBy("Oracle");
-        t.setCreationDate();
-        t.setLastUpdatedDate();
-        t.setLastUpdatedBy("Oracle");
+        //t.setCreatedBy("Oracle");
+        //t.setCreationDate();
+        //t.setLastUpdatedDate();
+        //t.setLastUpdatedBy("Oracle");
         this.em.persist(t);
         transaction.commit();
         return t;
@@ -121,13 +123,13 @@ public class EntityDaoImpl implements EntityDao{
      * @param t updated Entity Object 
      * @return updated Entity Object same as in parameter 
      */
-
+    
     public BaseEntity update(final BaseEntity t) throws NotSupportedException, SystemException, RollbackException,
                                                         HeuristicMixedException, HeuristicRollbackException {
         transaction.begin();
         em.joinTransaction();
-        t.setLastUpdatedDate();
-        t.setLastUpdatedBy("Oracle");
+        //t.setLastUpdatedDate();
+        //t.setLastUpdatedBy("Oracle");
         BaseEntity be=this.em.merge(t);
         transaction.commit();
         return be;
@@ -138,7 +140,7 @@ public class EntityDaoImpl implements EntityDao{
      *This method is used to get the list of data for a particular entity.
      * @return List of Entity Objects
      */
-        
+    /*   
     public List<BaseEntity> getData(int offset,int limit,HashMap<String,String> queryData){
         if(queryData==null)
             return (List<BaseEntity>) em.createQuery("select e from " + type.getSimpleName() + " e").setFirstResult(offset).setMaxResults(limit).getResultList();
@@ -159,6 +161,44 @@ public class EntityDaoImpl implements EntityDao{
             }
             return (List<BaseEntity>) em.createQuery(sql.toString()).setFirstResult(offset).setMaxResults(limit).getResultList();
         }
+    }*/
+    
+    public List<BaseEntity> getData(int offset,int limit,MultivaluedMap<String,String> queryData){
+        
+        int i=1,j=1,k=0;
+        StringBuilder sql = new StringBuilder();
+        sql.append("SELECT e FROM ")
+                .append(type.getSimpleName())
+                .append(" e");
+        if(queryData.containsKey("offset")){
+            ++k;
+        }
+        if(queryData.containsKey("limit")){
+            ++k;
+        }
+        for (String field : queryData.keySet()) {
+            if(!field.equals("offset") && !field.equals("limit")){
+                if(i==1){
+                sql.append(" WHERE ");
+                }
+                sql.append("e.")
+                        .append(field)
+                        .append(" in (");
+                j=1;
+                for(String s:queryData.get(field)){
+                    sql.append(s);
+                    ++j;
+                    if(j<=queryData.get(field).size()){
+                        sql.append(",");
+                    }
+                }
+                sql.append(")");
+                ++i;
+                if(i<=queryData.keySet().size()-k)
+                    sql.append(" and ");
+            }
+        }        
+        return (List<BaseEntity>) em.createQuery(sql.toString()).setFirstResult(offset).setMaxResults(limit).getResultList();
     }
 }
 

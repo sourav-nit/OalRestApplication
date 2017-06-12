@@ -12,6 +12,11 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.util.concurrent.ConcurrentHashMap;
+
+import java.util.concurrent.ConcurrentMap;
+
+
 import oal.oracle.apps.epm.entities.Order_Header;
 import oal.oracle.apps.epm.entities.Order_Lines;
 
@@ -22,6 +27,9 @@ public class FairLock {
     
     public static void main(String[] args) throws ParseException {
         
+        //ConcurrentMap concurrentMap = new ConcurrentHashMap();
+        
+        System.out.println(System.getProperty("java.class.path"));
         Order_Header oh=new Order_Header();
         Order_Lines ol=new Order_Lines();
         List<Order_Lines> olList=new ArrayList<>();
@@ -29,7 +37,7 @@ public class FairLock {
         Order_Header oh_out=new Order_Header();
         
         
-        System.out.println(oh_out.getOrderHeaderId());
+        //System.out.println(oh_out.getOrderHeaderId());
         
     }
 }
