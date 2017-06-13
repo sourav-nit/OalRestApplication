@@ -56,8 +56,8 @@ public class EntityBOImplIntTest {
 //@Before    
     public EntityBOImplIntTest(){
         url ="https://localhost:7102/Utils/rest"; 
-        String name = "sourav";
-        String password = "souravP5@";
+        String name = "";
+        String password = "";
         String authString = name + ":" + password;
         String authStringEnc = new BASE64Encoder().encode(authString.getBytes());
         map=new MultivaluedHashMap<String,Object>();
